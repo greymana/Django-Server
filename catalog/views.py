@@ -4,13 +4,16 @@ from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 
-
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from catalog.forms import RenewBookForm
 
+from django.views.generic import TemplateView
+
+class AboutView(TemplateView):
+    template_name = 'about_me.html'
 
 class BookListView(generic.ListView):
     model = Book
@@ -114,3 +117,6 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+
+
