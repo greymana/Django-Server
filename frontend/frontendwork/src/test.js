@@ -2,10 +2,11 @@ const axios = require('axios'); // Import Axios library
 
 // Define the API endpoint URL
 const apiUrl = 'http://localhost:8000/users/';
+// const apiUrl = 'http://leodemo.info/users/';
 
 const someone =   {
-    username: 'another',
-    email: 'another@gmail.com',
+    username: 'newuser22',
+    email: 'new@gmail.com',
     is_staff: true,
   };
 
@@ -22,7 +23,7 @@ show = () =>{
   })
   .catch((error) => {
     // Handle error
-    console.error('API Error:', error);
+    console.log('API Error:', error);
   });
 }
 

@@ -29,7 +29,6 @@ import React, { Component } from "react";
 import Modal from "./components/modal";
 import axios from "axios";
 
-const token = "d3e1373ed18628323b03a636b9f577e03444b816";
 const headers = {
   Authorization: "Token d3e1373ed18628323b03a636b9f577e03444b816",
   'Content-Type': 'application/json',
@@ -41,7 +40,13 @@ class App extends Component {
     super(props);
     this.state = {
       staffStatus: false,
-      userList:[],
+      userList:[
+      // {
+      //   username: "hahaha",
+      //   email: "hahaha@gmail.com",
+      //   is_staff: false,
+      // }
+      ],
       modal: false,
       activeUser: {
         username: "",
@@ -51,13 +56,14 @@ class App extends Component {
     };
   }
   componentDidMount(){
-    this.refreshList();
+      this.refreshList();
   }
 
   refreshList = () => {
-    axios.get("/users/")
-    .then((res)=>this.setState({userList:res.data}))
-    .catch((err)=>console.log(err));
+    axios
+      .get("http://localhost:8000/users/")
+      .then((res) => this.setState({ userList: res.data }))
+      .catch((err) => console.log(err));
   };
 
   toggle = () => {
@@ -68,16 +74,16 @@ class App extends Component {
     this.toggle();
 
     if(user.id){
-      axios.put("/users/${user.id}/", user, {headers})
+      axios.put(`http://localhost:8000/users/${user.id}/`, user, {headers})
       .then((res)=>this.refreshList());
       return;
     }
-    axios.post("/users/", user, {headers})
+    axios.post("http://localhost:8000/users/", user, {headers})
     .then((res)=>this.refreshList());
   };
 
   handleDelete = (user) => {
-    axios.delete("/users/${user.id}/", {headers})
+    axios.delete(`http://localhost:8000/users/${user.id}/`, {headers})
     .then((res)=>this.refreshList());
   };
 
@@ -106,22 +112,23 @@ class App extends Component {
           className={this.state.staffStatus ? "nav-link active" : "nav-link"}
           onClick={() => this.displayStaffStatus(true)}
         >
-          is a staff
+          is staff
         </span>
         <span
           className={this.state.staffStatus ? "nav-link" : "nav-link active"}
           onClick={() => this.displayStaffStatus(false)}
         >
-          not a staff
+          not  staff
         </span>
       </div>
+
     );
   };
 
   renderUsers = () => {
     const { staffStatus } = this.state;
     const newUsers = this.state.userList.filter(
-      (user) => user.is_staff == staffStatus
+      (user) => user.is_staff === staffStatus
     );
 
     return newUsers.map((user) => (
@@ -175,6 +182,7 @@ class App extends Component {
               </div>
               {this.renderTabList()}
               <ul className="list-group list-group-flush border-top-0">
+                
                 {this.renderUsers()}
               </ul>
             </div>
